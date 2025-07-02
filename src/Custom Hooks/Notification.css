@@ -1,0 +1,47 @@
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: slideInFadeOut 3s ease-in-out forwards;
+  z-index: 9999;
+  opacity: 0;
+}
+
+/* Background colors */
+.notification-green {
+  background-color: #4caf50;
+}
+.notification-red {
+  background-color: #f44336;
+}
+.notification-yellow {
+  background-color: #ff9800;
+}
+.notification-gray {
+  background-color: #607d8b;
+}
+
+/* Animation */
+@keyframes slideInFadeOut {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
