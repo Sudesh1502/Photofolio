@@ -1,0 +1,12 @@
+.sliderBtns{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  background: transparent;
+  padding: 5px;
+  border-radius: 50%;
+  border: none;
+  overflow: hidden;
+  
+}

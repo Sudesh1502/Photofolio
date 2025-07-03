@@ -3,8 +3,12 @@ import { db } from "../firebaseInit";
 import ImageForm from "./ImageForm";
 import { collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import Slider from "./Slider";
-import "./ImageList.css"; // Assuming you have some styles for the image list
+import "./ImageList.css"; 
 import { useNotification } from "../Custom Hooks/useNotification";
+import { MdEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { IoMdDownload } from "react-icons/io";
+
 
 const ImageList = ({ imgFolderId, albumName, setShowImgs }) => {
   const [photos, setPhotos] = useState([]);
@@ -42,8 +46,6 @@ const ImageList = ({ imgFolderId, albumName, setShowImgs }) => {
       );
       setPhotos(pht);
     });
-
-    // Cleanup listener on unmount or imgFolderId change
     return () => unsubscribe();
   }, [imgFolderId, imageSignal]);
 
@@ -82,8 +84,7 @@ const ImageList = ({ imgFolderId, albumName, setShowImgs }) => {
       setEditData(false);
     }
   };
-  const handleEditClick = (e, photo) => {
-    e.preventDefault();
+  const handleEditClick = (photo) => {
     setExImgData({
       title: photo.title,
       imageUrl: photo.imageUrl,
@@ -104,30 +105,56 @@ const ImageList = ({ imgFolderId, albumName, setShowImgs }) => {
     setSearchedPhotos(photo);
   };
 
+  const handleDownload = async (e, photo) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      const response = await fetch(photo.imageUrl);
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${photo.title || "image"}.jpg`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
+
   return (
     <>
       <Notification />
-      <div className="imageListHeading">
-        <p>This is the image folder {albumName}</p>
-        <button
-          onClick={(e) => {
-            handleBack(e);
-          }}
-        >
-          Back
-        </button>
+      <div className="image-list-header">
+        <div className="search-back-container">
+          <div>
+            <h2 className="list-heading">
+              You are in  album {albumName}
+            </h2>
+          </div>
 
-        <input
-          type="text"
-          name="searchImg"
-          id="searchImg"
-          className="searchImg"
-          placeholder="Search Image"
-          onChange={(e) => {
-            e.preventDefault();
-            searchImage(e.target.value);
-          }}
-        />
+          <div className="search-back">
+            <input
+              type="text"
+              name="searchImg"
+              id="searchImg"
+              className="search-img"
+              placeholder="Search Image"
+              onChange={(e) => {
+                e.preventDefault();
+                searchImage(e.target.value);
+              }}
+            />
+            <button className="back-btn" onClick={handleBack}>
+              Back
+            </button>
+          </div>
+        </div>
       </div>
 
       {showImageForm ? (
@@ -150,26 +177,27 @@ const ImageList = ({ imgFolderId, albumName, setShowImgs }) => {
           onClick={(e) => {
             handleAddImage(e);
           }}
+          className="add-image-btn"
         >
           Add Image
         </button>
       )}
 
       <div>
-        <h2>Photos for Album: {albumName}</h2>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
           {(searchedPhotos.length > 0 ? searchedPhotos : photos).map(
             (photo, index) => (
               <div
                 key={photo.id}
                 onClick={() => openSlider(index)}
+                className="image-item"
                 style={{
                   margin: "10px",
                   border: "1px solid #ddd",
                   padding: "10px",
                 }}
               >
-                <h3>{photo.title}</h3>
+                <h4 className="imageName" >{photo.title}</h4>
                 {photo.imageUrl && (
                   <div className="photo-container">
                     <img
@@ -178,24 +206,37 @@ const ImageList = ({ imgFolderId, albumName, setShowImgs }) => {
                       className="photo-image"
                     />
                     <div className="photo-overlay">
-                      <button onClick={(e) => handleEditClick(e, photo)}>
-                        Edit
-                      </button>
                       <button
+                      className="overlay-btns"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
+                          handleEditClick(photo);
+                        }}
+                      >
+                        <MdEdit style={{color: "green"}} />
+                      </button>
+                      <button
+                      className="overlay-btns"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           setDeleteData({
                             title: photo.title,
-                            time: new Date(photo.createdAt),
+                            time: new Date(photo.createdAt.seconds * 1000 + photo.createdAt.nanoseconds / 1e6).toString(),
                             photoId: photo.id,
                           });
-                          // deleteImg(e);
-
+                          console.log("date format", photo.createdAt)
                           setShowDelete(true);
                           setShowImageForm(true);
                         }}
                       >
-                        Delete
+                        <MdDelete style={{color: "red"}}/>
+                      </button>
+
+                      <button
+                      className="overlay-btns" onClick={(e) => handleDownload(e, photo)}>
+                        <IoMdDownload style={{color: "orange"}} />
                       </button>
                     </div>
                   </div>

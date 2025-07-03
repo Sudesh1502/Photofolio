@@ -11,8 +11,6 @@
   z-index: 9999;
   opacity: 0;
 }
-
-/* Background colors */
 .notification-green {
   background-color: #4caf50;
 }
@@ -26,7 +24,6 @@
   background-color: #607d8b;
 }
 
-/* Animation */
 @keyframes slideInFadeOut {
   0% {
     transform: translateX(100%);

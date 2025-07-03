@@ -1,3 +1,8 @@
+
+import './Slider.css';
+import { FaBackwardFast } from "react-icons/fa6";
+import { FaFastForward } from "react-icons/fa";
+
 const Slider = ({ sliderIndex, setSliderIndex, photos }) => {
   const closeSlider = () => setSliderIndex(null);
 
@@ -40,13 +45,16 @@ const Slider = ({ sliderIndex, setSliderIndex, photos }) => {
             alt={photos[sliderIndex].title}
             style={{ maxHeight: "80vh", maxWidth: "90vw" }}
           />
-          <div style={{ marginTop: "20px" }}>
-            <button onClick={showPrev} style={{ marginRight: "20px" }}>
-              ⬅️ Prev
+          <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+            <button
+            className="sliderBtns" onClick={showPrev} style={{ marginRight: "20px" }}>
+              <FaBackwardFast style={{color:"white"}} />
             </button>
             
 
-            <button onClick={showNext}>Next ➡️</button>
+            <button
+            className="sliderBtns" onClick={showNext}><FaFastForward style={{color:"white"}} />
+</button>
           </div>
         </div>
       </div>

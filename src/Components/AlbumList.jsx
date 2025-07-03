@@ -73,7 +73,7 @@ const AlbumList = () => {
     e.preventDefault();
     const newTitle = prompt("Enter new album title:");
     if (!newTitle || !newTitle.trim()) {
-      return alert("Please enter a valid album title.");
+      return;
     }
     alert(
       `Are you sure you want to update the album title from "${exTitle}"to "${newTitle}"?`
@@ -88,8 +88,6 @@ const AlbumList = () => {
       console.log(
         `Album with ID: ${albumId} title successfully updated to: "${newTitle}"`
       );
-      // Optional: Update your local state in your React component to reflect the change
-      // For example, if you have an 'albums' state:
       setAlbums((prevAlbums) =>
         prevAlbums.map((album) =>
           album.id === albumId ? { ...album, title: newTitle } : album
@@ -99,7 +97,6 @@ const AlbumList = () => {
       showNotification("successfully updated!", "yellow");
     } catch (error) {
       console.error("Error updating album title:", error);
-      // Handle the error, e.g., display an error message to the user
       setSignal((prev) => !prev);
       document.refresh();
       setActiveOverlayId(null);
@@ -116,12 +113,19 @@ const AlbumList = () => {
     <>
       <Notification />
       {showImgs ? (
-        <ImageList imgFolderId={imgFolderId} albumName={albumName} setShowImgs={setShowImgs} />
+        <ImageList
+          className="imageList"
+          imgFolderId={imgFolderId}
+          albumName={albumName}
+          setShowImgs={setShowImgs}
+        />
       ) : (
         <div className="albumList">
-          <div className="addForm">
+          <div className={showForm ? "showForm" : "albumListHeader"}>
             {!showForm ? (
-              <button onClick={addForm}>ADD ALBUM</button>
+              <button className="add-album-btn" onClick={addForm}>
+                ADD ALBUM
+              </button>
             ) : (
               <AlbumForm setSignal={setSignal} setShowForm={setShowForm} />
             )}
@@ -132,22 +136,28 @@ const AlbumList = () => {
               const isActive = activeOverlayId === album.id;
 
               return (
-                <div key={album.id} onClick={()=>{
+                <div
+                  key={album.id}
+                  onClick={() => {
                     albumClick(album.id, album.title);
-                }} className="album">
+                  }}
+                  className="album"
+                >
                   <div className="folder">
-                    <img src={folderSVG} alt="folder" />
+                    <img src={folderSVG} className="foldersvg" alt="folder" />
                   </div>
 
                   <div className="folderTitleWrapper">
                     <div className="folderName">{album?.title}</div>
                     <div
                       className="editing"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setActiveOverlayId((prev) =>
                           prev === album.id ? null : album.id
-                        )
-                      }
+                        );
+                      }}
                     >
                       <BsThreeDotsVertical />
                     </div>

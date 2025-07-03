@@ -1,4 +1,4 @@
-import { useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 import {
   addDoc,
   collection,
@@ -9,6 +9,7 @@ import {
 import { db } from "../firebaseInit";
 import { useNotification } from "../Custom Hooks/useNotification";
 import "../Custom Hooks/Notification.css";
+import "./ImageForm.css";
 
 const ImageForm = ({
   setImageSignal,
@@ -52,7 +53,7 @@ const ImageForm = ({
       const photosCollectionRef = collection(db, "albums", albumId, "photos");
       await addDoc(photosCollectionRef, {
         title: imageTitle,
-        imageUrl: imageUrl, 
+        imageUrl: imageUrl,
         createdAt: Timestamp.now(),
       });
 
@@ -107,15 +108,6 @@ const ImageForm = ({
     <>
       <Notification />
       <div className="ImageForm">
-        <button
-          onClick={(e) => {
-            handleRemoveImageForm(e);
-            setEditData(false);
-          }}
-        >
-          Cancel
-        </button>
-
         {showDelete ? (
           <div className="deleteBox">
             <div className="deleteText">
@@ -132,7 +124,16 @@ const ImageForm = ({
               >
                 Yes Delete
               </button>
-              <button>Cancel</button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setShowDelete(false);
+                  setShowImageForm(false);
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         ) : (
@@ -141,7 +142,18 @@ const ImageForm = ({
               handleAddImageToAlbum(e, imgFolderId);
             }}
           >
-            <h1>{editData ? "Update" : "Add"} Image</h1>
+            <div className="addImageHeading">
+              <h1>{editData ? "Update" : "Add"} Image</h1>
+              <button
+                onClick={(e) => {
+                  handleRemoveImageForm(e);
+                  setEditData(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+
             <div className="formGroup">
               <label htmlFor="albumTitle">Image Title</label>
               <input

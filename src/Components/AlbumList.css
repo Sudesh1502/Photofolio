@@ -3,27 +3,110 @@
   margin: 0;
 }
 
-.albums{
+.albumList {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 1rem 4rem;
+  scroll-behavior: smooth;
+}
+.albumList::-webkit-scrollbar {
+  display: none; 
+}
+.imageList{
+  overflow-y: scroll; 
+  padding: 1rem 4rem;
+  scroll-behavior: smooth;
+}
+.imageList::-webkit-scrollbar {
+  display: none; 
+}
+
+
+.showForm{
+  background-color: #efebeb;
+  width: 100%;
+  border: 3px solid #bdb9b9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.add-album-btn {
+  background-color: #2a7b9b;
+  color: #fff;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+  margin-left: 25px;
+  position: absolute;
+  bottom: 15px;
+  right: 25px;
+}
+
+.add-album-btn:hover {
+  background-color: #226a85;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.add-album-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+
+.albums {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     gap: 20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 94%;
+    scroll-behavior: smooth;
 }
+
+
+.albums::-webkit-scrollbar {
+  display: none; 
+}
+
 .album{
     width: 150px;
-    height: 300px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
+.folder:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  background-color: #d2d3d3; 
+  border-radius:8px;
+  border: 2px solid #9c9b9b;
+  overflow: hidden;
+}
+
 .folder{
     width:100%;
+    transition: all 0.3s ease-in-out;
+}
+.foldersvg{
+  height: 100%;
 }
 
 .folderName{
     font-size: 1.2rem;
+    overflow: hidden;
 }
 
 .folderTitleWrapper {
@@ -33,7 +116,6 @@
   gap: 25px;
   width: 100%;
   position: relative;
-  /* padding-top: 5px; */
 }
 
 .editing {
@@ -87,4 +169,18 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+@media only screen and (max-width: 600px) {
+  .albumList {
+  padding: 0.5rem 1rem;
+}
+
+.add-album-btn{
+  bottom: 35px;
+  right: 18px;
+}
+
+
 }

@@ -1,4 +1,3 @@
-// useNotification.js
 import { useState, useCallback } from "react";
 import "./Notification.css";
 
